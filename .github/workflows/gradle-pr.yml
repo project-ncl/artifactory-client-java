@@ -1,0 +1,16 @@
+name: Java CI with Gradle
+
+on:
+  pull_request:
+    branches: [master]
+
+permissions:
+  contents: read
+
+jobs:
+  build-gradle:
+    if: github.repository == 'project-ncl/artifactory-client-java'
+    uses: project-ncl/shared-github-actions/.github/workflows/gradle-ci.yml@302f28d7e903c08812ade0ec86fa90784fbe9e79 # main
+    with:
+      java_version: "17"
+      build_args: "--no-daemon --stacktrace clean build -x test"

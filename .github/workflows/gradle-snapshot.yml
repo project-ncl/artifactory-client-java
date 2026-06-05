@@ -1,0 +1,25 @@
+name: Build snapshot version and upload to Gradle Central
+
+permissions: {}
+
+on:
+  push:
+    branches: [master]
+
+jobs:
+  prep-env:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Set the value
+        run: |
+          echo "ORG_GRADLE_PROJECT_sonatypeUsername=${{ secrets.SONATYPE_USERNAME }}" >> "$GITHUB_ENV"
+          echo "ORG_GRADLE_PROJECT_sonatypePassword=${{ secrets.SONATYPE_PASSWORD }}" >> "$GITHUB_ENV"
+  call-snapshot-job:
+    uses: project-ncl/shared-github-actions/.github/workflows/gradle-snapshot.yml@899a05924ef8679de84ba6e42ab874885bf48f80 # main
+    with:
+      project_name: "project-ncl/artifactory-client-java"
+      java_version: "17"
+      snapshot_deploy_args: "--info build -x test publish"
+    secrets:
+      SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
+      SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
