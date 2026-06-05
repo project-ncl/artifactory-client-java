@@ -10,7 +10,7 @@ permissions:
 jobs:
   build-gradle:
     if: github.repository == 'project-ncl/artifactory-client-java'
-    uses: project-ncl/shared-github-actions/.github/workflows/gradle-ci.yml@302f28d7e903c08812ade0ec86fa90784fbe9e79 # main
+    uses: project-ncl/shared-github-actions/.github/workflows/gradle-ci.yml@70502d0c707f7d7abb41b02af80fb094a022a760 # main
     with:
       java_version: "17"
       build_args: "--no-daemon --stacktrace clean build -x test"
