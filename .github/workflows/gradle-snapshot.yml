@@ -7,13 +7,6 @@ on:
     branches: [master]
 
 jobs:
-  prep-env:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Set the value
-        run: |
-          echo "ORG_GRADLE_PROJECT_sonatypeUsername=${{ secrets.SONATYPE_USERNAME }}" >> "$GITHUB_ENV"
-          echo "ORG_GRADLE_PROJECT_sonatypePassword=${{ secrets.SONATYPE_PASSWORD }}" >> "$GITHUB_ENV"
   call-snapshot-job:
     uses: project-ncl/shared-github-actions/.github/workflows/gradle-snapshot.yml@70502d0c707f7d7abb41b02af80fb094a022a760 # main
     with:
