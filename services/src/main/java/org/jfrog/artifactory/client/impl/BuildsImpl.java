@@ -5,13 +5,13 @@ import org.jfrog.artifactory.client.Artifactory;
 import org.jfrog.artifactory.client.Builds;
 import org.jfrog.artifactory.client.impl.util.Util;
 import org.jfrog.artifactory.client.model.AllBuilds;
-import org.jfrog.artifactory.client.model.BuildInfo;
 import org.jfrog.artifactory.client.model.BuildPromotionRequest;
 import org.jfrog.artifactory.client.model.BuildPromotionResponse;
 import org.jfrog.artifactory.client.model.BuildRuns;
 import org.jfrog.artifactory.client.model.impl.AllBuildsImpl;
 import org.jfrog.artifactory.client.model.impl.BuildPromotionResponseImpl;
 import org.jfrog.artifactory.client.model.impl.BuildRunsImpl;
+import org.jfrog.build.api.Build;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -40,12 +40,12 @@ public class BuildsImpl implements Builds {
     }
 
     @Override
-    public void uploadBuild(BuildInfo buildInfo) throws IOException {
-        uploadBuild(buildInfo, null);
+    public void uploadBuild(Build build) throws IOException {
+        uploadBuild(build, null);
     }
 
     @Override
-    public void uploadBuild(BuildInfo buildInfo, String project) throws IOException {
+    public void uploadBuild(Build build, String project) throws IOException {
         String apiPath = getBuilderApi();
         if (project != null && !project.isEmpty()) {
             apiPath += "?project=" + project;
@@ -53,7 +53,7 @@ public class BuildsImpl implements Builds {
         
         Map<String, String> headers = new HashMap<>();
         artifactory.put(apiPath, ContentType.APPLICATION_JSON,
-                Util.getStringFromObject(buildInfo), headers, null, -1,
+                Util.getStringFromObject(build), headers, null, -1,
                 String.class, null);
     }
 

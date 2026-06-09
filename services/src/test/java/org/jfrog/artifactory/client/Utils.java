@@ -5,8 +5,7 @@ import org.apache.commons.io.IOUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.jfrog.artifactory.client.impl.ArtifactoryRequestImpl;
-import org.jfrog.artifactory.client.model.BuildInfo;
-import org.jfrog.artifactory.client.model.impl.BuildInfoImpl;
+import org.jfrog.build.api.Build;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
@@ -43,13 +42,13 @@ public class Utils {
         return new HashMap<>();
     }
 
-    public static BuildInfo createBuildInfo() {
+    public static Build createBuild() {
         String buildStarted = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ").format(System.currentTimeMillis());
         try {
             String buildInfoJson = IOUtils.toString(Utils.class.getResourceAsStream("/build.json"), StandardCharsets.UTF_8);
             buildInfoJson = StringUtils.replace(buildInfoJson, "{build.start.time}", buildStarted);
             ObjectMapper mapper = new ObjectMapper();
-            return mapper.readValue(buildInfoJson, BuildInfoImpl.class);
+            return mapper.readValue(buildInfoJson, Build.class);
         } catch (IOException e) {
             fail(ExceptionUtils.getRootCauseMessage(e));
         }

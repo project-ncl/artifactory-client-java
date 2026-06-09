@@ -2,13 +2,12 @@ package org.jfrog.artifactory.client;
 
 import org.apache.commons.lang3.StringUtils;
 import org.jfrog.artifactory.client.model.AllBuilds;
-import org.jfrog.artifactory.client.model.Build;
-import org.jfrog.artifactory.client.model.BuildInfo;
 import org.jfrog.artifactory.client.model.BuildNumber;
 import org.jfrog.artifactory.client.model.BuildPromotionResponse;
 import org.jfrog.artifactory.client.model.BuildRuns;
 import org.jfrog.artifactory.client.model.PromotionMessage;
 import org.jfrog.artifactory.client.model.impl.BuildPromotionRequestImpl;
+import org.jfrog.build.api.Build;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -17,8 +16,8 @@ import java.text.SimpleDateFormat;
 import java.util.List;
 import java.util.Map;
 
+import static org.jfrog.artifactory.client.Utils.createBuild;
 import static org.jfrog.artifactory.client.Utils.createBuildBody;
-import static org.jfrog.artifactory.client.Utils.createBuildInfo;
 import static org.jfrog.artifactory.client.Utils.uploadBuild;
 import static org.testng.Assert.*;
 
@@ -50,12 +49,12 @@ public class BuildsTests extends ArtifactoryTestsBase {
         assertNotNull(allBuilds);
         assertTrue(StringUtils.contains(allBuilds.getUri(), BUILDS_API),
                 allBuilds.getUri() + " is expected to contains '" + BUILDS_API + "'");
-        List<Build> actualBuilds = allBuilds.getBuilds();
+        List<org.jfrog.artifactory.client.model.Build> actualBuilds = allBuilds.getBuilds();
         assertNotNull(actualBuilds);
 
         // Assert build uri "/TestBuild" exist
         String expectedBuildUri = "/" + getExpectedBuildName();
-        Build actualBuild = actualBuilds.stream()
+        org.jfrog.artifactory.client.model.Build actualBuild = actualBuilds.stream()
                 .filter(build -> StringUtils.equals(build.getUri(), expectedBuildUri))
                 .findAny().orElse(null);
         assertNotNull(actualBuild, "Build Uri " + expectedBuildUri + " does not exist in [" + actualBuilds + "]");
@@ -81,15 +80,15 @@ public class BuildsTests extends ArtifactoryTestsBase {
 
     @Test
     public void testUploadBuild() throws IOException {
-        // Create a new build info
-        BuildInfo buildInfo = createBuildInfo();
+        // Create a new build using the build-info API
+        Build build = createBuild();
         
         // Modify the build name and number to avoid conflicts
-        ((org.jfrog.artifactory.client.model.impl.BuildInfoImpl) buildInfo).setName(UPLOAD_TEST_BUILD_NAME);
-        ((org.jfrog.artifactory.client.model.impl.BuildInfoImpl) buildInfo).setNumber(UPLOAD_TEST_BUILD_NUMBER);
+        build.setName(UPLOAD_TEST_BUILD_NAME);
+        build.setNumber(UPLOAD_TEST_BUILD_NUMBER);
         
         // Upload the build
-        artifactory.builds().uploadBuild(buildInfo);
+        artifactory.builds().uploadBuild(build);
         
         // Verify the build was uploaded by retrieving it
         BuildRuns buildRuns = artifactory.builds().getBuildRuns(UPLOAD_TEST_BUILD_NAME);
@@ -104,11 +103,11 @@ public class BuildsTests extends ArtifactoryTestsBase {
 
     @Test
     public void testPromoteBuild() throws IOException {
-        // First upload a build to promote
-        BuildInfo buildInfo = createBuildInfo();
-        ((org.jfrog.artifactory.client.model.impl.BuildInfoImpl) buildInfo).setName(PROMOTE_TEST_BUILD_NAME);
-        ((org.jfrog.artifactory.client.model.impl.BuildInfoImpl) buildInfo).setNumber(PROMOTE_TEST_BUILD_NUMBER);
-        artifactory.builds().uploadBuild(buildInfo);
+        // First upload a build to promote using the build-info API
+        Build build = createBuild();
+        build.setName(PROMOTE_TEST_BUILD_NAME);
+        build.setNumber(PROMOTE_TEST_BUILD_NUMBER);
+        artifactory.builds().uploadBuild(build);
         
         // Create promotion request
         BuildPromotionRequestImpl promotionRequest = new BuildPromotionRequestImpl();

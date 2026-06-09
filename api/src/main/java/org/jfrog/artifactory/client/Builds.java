@@ -1,10 +1,10 @@
 package org.jfrog.artifactory.client;
 
 import org.jfrog.artifactory.client.model.AllBuilds;
-import org.jfrog.artifactory.client.model.BuildInfo;
 import org.jfrog.artifactory.client.model.BuildPromotionRequest;
 import org.jfrog.artifactory.client.model.BuildPromotionResponse;
 import org.jfrog.artifactory.client.model.BuildRuns;
+import org.jfrog.build.api.Build;
 
 import java.io.IOException;
 
@@ -17,21 +17,21 @@ public interface Builds {
     BuildRuns getBuildRuns(String buildName) throws IOException;
 
     /**
-     * Upload a build to Artifactory
+     * Upload a build to Artifactory using the official build-info API
      *
-     * @param buildInfo the build info
+     * @param build the build info from org.jfrog.build.api.Build
      * @throws IOException if the upload fails
      */
-    void uploadBuild(BuildInfo buildInfo) throws IOException;
+    void uploadBuild(Build build) throws IOException;
 
     /**
-     * Upload a build to Artifactory with a project parameter
+     * Upload a build to Artifactory with a project parameter using the official build-info API
      *
-     * @param buildInfo the build info
+     * @param build the build info from org.jfrog.build.api.Build
      * @param project the project name to limit the build to
      * @throws IOException if the upload fails
      */
-    void uploadBuild(BuildInfo buildInfo, String project) throws IOException;
+    void uploadBuild(Build build, String project) throws IOException;
 
     /**
      * Promote a build in Artifactory
