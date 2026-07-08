@@ -14,6 +14,11 @@ plugins {
     id 'io.github.gradle-nexus.publish-plugin' version '1.0.0'
 }
 
+// The Artifactory and nexus-publish plugins only work on Gradle 7 because APIs they
+// use (project.convention, ConfigureUtil) are missing in newer Gradle versions;
+// skip them on newer Gradle (needed for Mend)
+def publishingEnabled = (gradle.gradleVersion.tokenize('.')[0] as int) < 8
+
 allprojects {
     repositories {
         mavenCentral()
@@ -24,7 +29,9 @@ allprojects {
 
 
     apply plugin: 'maven-publish'
-    apply plugin: 'com.jfrog.artifactory'
+    if (publishingEnabled) {
+        apply plugin: 'com.jfrog.artifactory'
+    }
 
     group = 'org.jboss.pnc.artifactory-client'
     version = currentVersion
@@ -35,23 +42,25 @@ allprojects {
     }
 }
 
-artifactoryPublish.skip = true
+if (publishingEnabled) {
+    artifactoryPublish.skip = true
 
-artifactory {
-    publish {
-        defaults {
-            publications 'main'
+    artifactory {
+        publish {
+            defaults {
+                publications 'main'
+            }
         }
     }
-}
 
-nexusPublishing {
-    repositories {
-        sonatype {
-            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
-            username = System.getenv("MAVEN_USERNAME")
-            password = System.getenv("MAVEN_PASSWORD")
+    nexusPublishing {
+        repositories {
+            sonatype {
+                nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+                snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+                username = System.getenv("MAVEN_USERNAME")
+                password = System.getenv("MAVEN_PASSWORD")
+            }
         }
     }
 }
