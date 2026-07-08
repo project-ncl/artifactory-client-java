@@ -69,8 +69,10 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'signing'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
 
     // Force secure versions to fix vulnerabilities
     configurations.all {
