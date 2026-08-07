@@ -1,3 +1,15 @@
+plugins {
+    id 'com.gradleup.nmcp.settings' version '1.6.1'
+}
+
+nmcpSettings {
+    centralPortal {
+        username = System.getenv("MAVEN_USERNAME")
+        password = System.getenv("MAVEN_PASSWORD")
+        publishingType = "USER_MANAGED"
+    }
+}
+
 String rootName = 'artifactory-java-client'
 String api = 'api'
 String services = 'services'

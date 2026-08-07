@@ -2,7 +2,7 @@ buildscript {
     repositories {
         mavenCentral()
         maven {
-            url "https://releases.jfrog.io/artifactory/oss-releases"
+            url = "https://releases.jfrog.io/artifactory/oss-releases"
         }
     }
     dependencies {
@@ -10,15 +10,11 @@ buildscript {
     }
 }
 
-plugins {
-    id 'io.github.gradle-nexus.publish-plugin' version '1.0.0'
-}
-
 allprojects {
     repositories {
         mavenCentral()
         maven {
-            url "https://releases.jfrog.io/artifactory/oss-releases"
+            url = "https://releases.jfrog.io/artifactory/oss-releases"
         }
     }
 
@@ -30,8 +26,8 @@ allprojects {
     version = currentVersion
     status = version.endsWith('-SNAPSHOT') ? 'integration' : 'release'
 
-    project.tasks.withType(Jar).each {
-        it.version = currentVersion
+    tasks.withType(Jar).configureEach {
+        version = currentVersion
     }
 }
 
@@ -45,23 +41,14 @@ artifactory {
     }
 }
 
-nexusPublishing {
-    repositories {
-        sonatype {
-            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
-            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
-            username = System.getenv("MAVEN_USERNAME")
-            password = System.getenv("MAVEN_PASSWORD")
-        }
-    }
-}
-
 subprojects {
     apply plugin: 'java-library'
     apply plugin: 'signing'
 
-    sourceCompatibility = 1.8
-    targetCompatibility = 1.8
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
 
     // Force secure versions to fix vulnerabilities
     configurations.all {
@@ -91,12 +78,14 @@ subprojects {
         api 'org.jfrog.buildinfo:build-info-api:2.43.9'
     }
 
-    task sourcesJar(type: Jar, dependsOn: classes) {
+    tasks.register('sourcesJar', Jar) {
+        dependsOn classes
         archiveClassifier.set('sources')
         from sourceSets.main.allSource
     }
 
-    task javadocJar(type: Jar, dependsOn: javadoc) {
+    tasks.register('javadocJar', Jar) {
+        dependsOn javadoc
         archiveClassifier.set('javadoc')
         from javadoc.destinationDir
     }
@@ -104,9 +93,9 @@ subprojects {
     test {
         useTestNG()
         testLogging {
-            exceptionFormat "full"
+            exceptionFormat = "full"
             events "started", "passed", "skipped", "failed", "standardOut", "standardError"
-            minGranularity 0
+            minGranularity = 0
         }
         ignoreFailures = System.getenv("IGNORE_FAILURES") ? System.getenv("IGNORE_FAILURES").toBoolean() : false
     }
