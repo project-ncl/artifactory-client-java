@@ -1,3 +1,17 @@
+# ProjectNCL Fork
+
+This is a fork of the original https://github.com/jfrog/artifactory-client-java
+
+## Changes since 2.21.2
+
+- **Add `FileSpecBuilder`** — new `FileSpecBuilder` and `IncludeAwareFileSpec` classes providing a fluent builder API for constructing AQL file specifications. Also adds missing fields to `AqlItem`.
+- **Fix deserialization of `BuildPromotionResponse`** — resolved a Jackson deserialization issue with the `promotionMessage` field in `BuildPromotionResponseImpl`.
+- **Migrate to official build-info API** — removed the local `BuildInfo`/`BuildInfoImpl` models and switched to the upstream `org.jfrog.build.extractor.ci.BuildInfo` type from the official build-info API library.
+- **Add build upload and promotion** — extended the `Builds` API with `uploadBuild` and `promoteBuild` operations, along with new `BuildPromotionRequest`, `BuildPromotionResponse`, and `PromotionMessage` model types.
+- **Add `projectKey` and `environment` to repository builder** — `Repository`, `RepositoryBuilder`, and all repository impl/builder classes now support `projectKey` and `environment` fields.
+
+---
+
 <div align="center">
 
 # Artifactory Java Client
