@@ -1,20 +1,15 @@
+# From https://docs.github.com/en/repositories/releasing-projects-on-github/automatically-generated-release-notes#creating-automatically-generated-release-notes-for-a-new-release
 changelog:
-  exclude:
-    labels:
-      - ignore for release
   categories:
-    - title: Breaking Changes 🚨
+    - title: 🐛 Fixes / 🚀 Enhancements
       labels:
-        - breaking change
-    - title: Exciting New Features 🎉
+        - '*'
+      exclude:
+        labels:
+          - dependencies
+    - title: 👒 Project Dependencies
       labels:
-        - new feature
-    - title: Improvements 🌱
+        - java
+    - title: 👒 CI Dependencies
       labels:
-        - improvement
-    - title: Bug Fixes 🛠
-      labels:
-        - bug
-    - title: Other Changes 📚
-      labels:
-        - "*"
+        - github_actions
