@@ -1,6 +1,7 @@
 package org.jfrog.artifactory.client;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.http.client.HttpResponseException;
 import org.jfrog.artifactory.client.model.AllBuilds;
 import org.jfrog.artifactory.client.model.BuildNumber;
 import org.jfrog.artifactory.client.model.BuildPromotionResponse;
@@ -139,6 +140,17 @@ public class BuildsTests extends ArtifactoryTestsBase {
                 assertNotNull(message.getMessage());
             }
         }
+    }
+
+    @Test(expectedExceptions = HttpResponseException.class,
+          description = "A non-existent build must produce HttpResponseException(404), " +
+                        "not a JsonParseException from Jackson parsing an HTML/JSON error page. " +
+                        "Regression test for the missing status-code check in ArtifactoryImpl.post().")
+    public void testPromoteBuild_nonexistentBuild_throwsHttpResponseException() throws IOException {
+        BuildPromotionRequestImpl req = new BuildPromotionRequestImpl();
+        req.setTargetRepo("any-repo");
+        // This must throw HttpResponseException, not JsonParseException
+        artifactory.builds().promoteBuild("no-such-build-xyzzy-regression", "99999", req);
     }
 
     private String getExpectedBuildName() {

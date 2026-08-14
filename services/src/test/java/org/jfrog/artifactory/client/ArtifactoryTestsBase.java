@@ -16,6 +16,7 @@ import org.jfrog.artifactory.client.model.VirtualRepository;
 import org.jfrog.artifactory.client.model.repository.settings.impl.MavenRepositorySettingsImpl;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
+import org.testng.annotations.Test;
 
 import java.io.IOException;
 import java.io.InputStream;
@@ -33,9 +34,14 @@ import static org.apache.commons.lang3.StringUtils.isEmpty;
 import static org.apache.commons.lang3.StringUtils.remove;
 
 /**
+ * All concrete subclasses of this base class require a live Artifactory instance.
+ * Placing them in the "integration" group lets the default Gradle build skip them;
+ * pass {@code -PrunIntegrationTests=true} to include them.
+ *
  * @author jbaruch
  * @since 30/07/12
  */
+@Test(groups = "integration")
 public abstract class ArtifactoryTestsBase {
     protected static final String PATH = "m/a/b/c.txt";
     protected static final String PATH_PROPS = "m/a/b/p.txt";
