@@ -12,7 +12,7 @@ jobs:
     with:
       project_name: "project-ncl/artifactory-client-java"
       java_version: "17"
-      snapshot_deploy_args: "--info build publish"
+      snapshot_deploy_args: "--info build publishAggregationToCentralPortalSnapshots"
     secrets:
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
