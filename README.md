@@ -4,6 +4,16 @@ This is a fork of the original https://github.com/jfrog/artifactory-client-java
 
 ## Changes since 2.21.2
 
+Note that this excludes internal changes such as publishing to the `org.jboss.pnc` namespace and github actions.
+
+## 2.23.0
+
+- **Fix HTTP error handling** — `post()` and `patch()` now check for error responses before deserialisation, preventing spurious `JsonParseException` errors in place of meaningful HTTP exceptions.
+- **Consolidate `ObjectMapper` usage** — replaced per-call `new ObjectMapper()` construction across the codebase with a single shared `Util.CONFIGURED_MAPPER` singleton; `Util.configureObjectMapper()` is now deprecated.
+- **Enable unit tests without a live Artifactory instance** — integration tests are excluded from the default `./gradlew test` run (opt in with `-PrunIntegrationTests=true`); adds `mockito-core` as a test dependency.
+
+## 2.22.0
+
 - **Add `FileSpecBuilder`** — new `FileSpecBuilder` and `IncludeAwareFileSpec` classes providing a fluent builder API for constructing AQL file specifications. Also adds missing fields to `AqlItem`.
 - **Fix deserialization of `BuildPromotionResponse`** — resolved a Jackson deserialization issue with the `promotionMessage` field in `BuildPromotionResponseImpl`.
 - **Migrate to official build-info API** — removed the local `BuildInfo`/`BuildInfoImpl` models and switched to the upstream `org.jfrog.build.extractor.ci.BuildInfo` type from the official build-info API library.
