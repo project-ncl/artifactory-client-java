@@ -2,6 +2,7 @@ package org.jfrog.artifactory.client.aql;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import org.jfrog.filespecs.FileSpec;
 import org.jfrog.filespecs.entities.Aql;
 import org.jfrog.filespecs.entities.FilesGroup;
@@ -284,9 +285,16 @@ public class FileSpecBuilder {
 
     // ── internals ─────────────────────────────────────────────────────────────
 
+    /**
+     * Plain mapper for AQL find-body structures — plain Map values only, no mix-ins needed.
+     * Must not share {@code Util.CONFIGURED_MAPPER} which carries Repository mix-ins that are
+     * inappropriate for AQL serialisation.
+     */
+    private static final ObjectMapper PLAIN_MAPPER = new ObjectMapper();
+
     private String serializeRoot() {
         try {
-            return new ObjectMapper().writeValueAsString(root);
+            return PLAIN_MAPPER.writeValueAsString(root);
         } catch (JsonProcessingException e) {
             throw new AqlBuilderException("Error serializing AQL find-body to JSON: ", e);
         }

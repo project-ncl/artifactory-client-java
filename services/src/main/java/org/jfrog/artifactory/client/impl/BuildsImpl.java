@@ -14,8 +14,6 @@ import org.jfrog.artifactory.client.model.impl.BuildRunsImpl;
 import org.jfrog.build.api.Build;
 
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * @author yahavi
@@ -48,30 +46,28 @@ public class BuildsImpl implements Builds {
     public void uploadBuild(Build build, String project) throws IOException {
         String apiPath = getBuilderApi();
         if (project != null && !project.isEmpty()) {
-            apiPath += "?project=" + project;
+            apiPath += "?project=" + Util.encodeParams(project);
         }
-        
-        Map<String, String> headers = new HashMap<>();
         artifactory.put(apiPath, ContentType.APPLICATION_JSON,
-                Util.getStringFromObject(build), headers, null, -1,
+                Util.getStringFromObject(build), null, null, -1,
                 String.class, null);
     }
 
     @Override
-    public BuildPromotionResponse promoteBuild(String buildName, String buildNumber, BuildPromotionRequest promotionRequest) throws IOException {
+    public BuildPromotionResponse promoteBuild(String buildName, String buildNumber,
+            BuildPromotionRequest promotionRequest) throws IOException {
         return promoteBuild(buildName, buildNumber, promotionRequest, null);
     }
 
     @Override
-    public BuildPromotionResponse promoteBuild(String buildName, String buildNumber, BuildPromotionRequest promotionRequest, String project) throws IOException {
+    public BuildPromotionResponse promoteBuild(String buildName, String buildNumber,
+            BuildPromotionRequest promotionRequest, String project) throws IOException {
         String apiPath = getBuilderApi() + "promote/" + buildName + "/" + buildNumber;
         if (project != null && !project.isEmpty()) {
-            apiPath += "?project=" + project;
+            apiPath += "?project=" + Util.encodeParams(project);
         }
-        
-        Map<String, String> headers = new HashMap<>();
         return artifactory.post(apiPath, ContentType.APPLICATION_JSON,
-                Util.getStringFromObject(promotionRequest), headers,
+                Util.getStringFromObject(promotionRequest), null,
                 BuildPromotionResponseImpl.class, BuildPromotionResponse.class);
     }
 
