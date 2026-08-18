@@ -10,6 +10,10 @@ buildscript {
     }
 }
 
+plugins {
+    id 'io.github.simonhauck.release' version '1.5.1'
+}
+
 allprojects {
     repositories {
         mavenCentral()
@@ -137,14 +141,24 @@ subprojects {
     }
 
     signing {
-        useGpgCmd()
-//        def signingKey = findProperty("signingKey")
-//        def signingPassword = findProperty("signingPassword")
-//        useInMemoryPgpKeys(signingKey, signingPassword)
+        def signingKey = System.getenv("GPG_SIGNING_KEY")
+        def signingPassword = System.getenv("GPG_SIGNING_PASSWORD")
+        if (signingKey) {
+            useInMemoryPgpKeys(signingKey, signingPassword)
+        } else {
+            useGpgCmd()
+        }
         sign publishing.publications.main
     }
 
     tasks.withType(Sign) {
         onlyIf { !project.version.toString().endsWith('-SNAPSHOT') }
     }
+}
+
+// Wire publishAggregationToCentralPortal into the release task graph.
+// This ensures it runs after pushRelease but before the post-release snapshot
+// commit is written. If publishing fails the build stops; no snapshot bump is committed.
+tasks.named("writePostReleaseVersion") {
+    dependsOn("publishAggregationToCentralPortal")
 }
