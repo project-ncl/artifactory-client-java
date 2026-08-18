@@ -6,7 +6,7 @@ This is a fork of the original https://github.com/jfrog/artifactory-client-java
 
 Note that this excludes internal changes such as publishing to the `org.jboss.pnc` namespace and github actions.
 
-## 2.23.0
+## 2.22.1
 
 - **Fix HTTP error handling** — `post()` and `patch()` now check for error responses before deserialisation, preventing spurious `JsonParseException` errors in place of meaningful HTTP exceptions.
 - **Consolidate `ObjectMapper` usage** — replaced per-call `new ObjectMapper()` construction across the codebase with a single shared `Util.CONFIGURED_MAPPER` singleton; `Util.configureObjectMapper()` is now deprecated.
