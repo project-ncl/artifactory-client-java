@@ -171,6 +171,7 @@ class SearchesImpl implements Searches {
             AqlSearchResults groupResults = artifactory.post(url, ContentType.TEXT_PLAIN, groupAql, null, AqlSearchResults, null)
             results.addAll(groupResults.getResults())
         }
+        results.forEach { it.resolveRepoCache() }
         return results
     }
 

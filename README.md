@@ -11,6 +11,7 @@ Note that this excludes internal changes such as publishing to the `org.jboss.pn
 - **Fix HTTP error handling** — `post()` and `patch()` now check for error responses before deserialisation, preventing spurious `JsonParseException` errors in place of meaningful HTTP exceptions.
 - **Consolidate `ObjectMapper` usage** — replaced per-call `new ObjectMapper()` construction across the codebase with a single shared `Util.CONFIGURED_MAPPER` singleton; `Util.configureObjectMapper()` is now deprecated.
 - **Enable unit tests without a live Artifactory instance** — integration tests are excluded from the default `./gradlew test` run (opt in with `-PrunIntegrationTests=true`); adds `mockito-core` as a test dependency.
+- **Strip `-cache` suffix from AQL results** — `AqlItem` now exposes a `getRepoCache()` accessor and, after an AQL search, automatically strips the `-cache` suffix from any repository name so that callers receive the canonical repo name; the original cache repo name is preserved in `repoCache`.
 
 ## 2.22.0
 
