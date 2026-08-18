@@ -1,6 +1,7 @@
 package org.jfrog.artifactory.client.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
@@ -9,7 +10,11 @@ import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class AqlItem {
+    private static final String CACHE_SUFFIX = "-cache";
+
     private String repo;
+    @JsonIgnore
+    private String repoCache;
     private String path;
     private String name;
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss.SSSXXX")
@@ -36,6 +41,26 @@ public class AqlItem {
 
     public String getRepo() {
         return repo;
+    }
+
+    /**
+     * If the original repository was a cache that is stored in here while
+     * the original repository was updated to be without the cache to allow
+     * calls to be made upon it.
+     */
+    public String getRepoCache() {
+        return repoCache;
+    }
+
+    /**
+     * If {@code repo} ends with {@value #CACHE_SUFFIX}, strips the suffix from {@code repo}
+     * and records the original value in {@code repoCache}. No-op otherwise.
+     */
+    void resolveRepoCache() {
+        if (repo != null && repo.endsWith(CACHE_SUFFIX)) {
+            this.repoCache = this.repo;
+            this.repo = this.repo.substring(0, this.repo.length() - CACHE_SUFFIX.length());
+        }
     }
 
     public String getPath() {
@@ -124,6 +149,7 @@ public class AqlItem {
     public String toString() {
         StringBuilder sb = new StringBuilder("AqlItem [");
         appendIfNotNull(sb, "repo",        repo);
+        appendIfNotNull(sb, "repoCache",   repoCache);
         appendIfNotNull(sb, "path",        path);
         appendIfNotNull(sb, "name",        name);
         appendIfNotNull(sb, "created",     created);
