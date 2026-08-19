@@ -35,12 +35,7 @@ allprojects {
     apply plugin: 'com.jfrog.artifactory'
 
     group = 'org.jboss.pnc.artifactory-client'
-    version = currentVersion
     status = version.endsWith('-SNAPSHOT') ? 'integration' : 'release'
-
-    tasks.withType(Jar).configureEach {
-        version = currentVersion
-    }
 }
 
 artifactoryPublish.skip = true
