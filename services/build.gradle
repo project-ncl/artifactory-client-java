@@ -23,7 +23,9 @@ task createReleasePropertiesFile(type: Exec) {
     String fileName = 'artifactory.client.release.properties'
     println("Creating $fileName")
     String fileContent = "version=$version"
-    (new File("$rootDir/services/src/main/resources/$fileName")).write(fileContent)
+    File file = new File("$rootDir/services/src/main/resources/$fileName")
+    file.parentFile.mkdirs()
+    file.write(fileContent)
 }
 
 def addGroovy(name) {

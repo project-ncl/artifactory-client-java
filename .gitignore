@@ -18,3 +18,9 @@ atlassian-*.xml
 .settings
 ning-services/src/test/resources/artifactory-client.properties
 ning-services/src/test/resources/artifactory-ning-client.properties
+
+
+services/src/main/resources/artifactory.client.release.properties
+
+
+.vscode

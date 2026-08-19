@@ -11,10 +11,10 @@ on:
         type: string
         default: ''
       release_type:
-        description: 'Semver component to bump: major, minor or patch. Default: micro'
+        description: 'Semver component to bump: major, minor or patch. Default: patch'
         required: false
         type: string
-        default: 'micro'
+        default: 'patch'
 
 jobs:
   call-release-job:
