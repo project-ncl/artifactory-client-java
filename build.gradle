@@ -15,6 +15,7 @@ plugins {
 }
 
 release {
+    tagName.set("{version}")
     ignorePreReleaseDependencies = [
         "org.jboss.pnc.artifactory-client:artifactory-java-client-api",
         "org.jboss.pnc.artifactory-client:artifactory-java-client-httpClient",
