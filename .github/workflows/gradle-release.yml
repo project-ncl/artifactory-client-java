@@ -18,9 +18,10 @@ on:
 
 jobs:
   call-release-job:
+    permissions:
+      contents: write # needed to push commit and tag back to the repository
     uses: project-ncl/shared-github-actions/.github/workflows/gradle-release.yml@118427846d0593b9fa61c254e2ae13f38f857cec
     with:
-      project_name: "project-ncl/artifactory-client-java"
       java_version: "17"
       ref_to_release: ${{ inputs.ref_to_release }}
       release_type: ${{ inputs.release_type }}
