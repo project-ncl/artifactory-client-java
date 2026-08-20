@@ -17,6 +17,7 @@ jobs:
       contents: write # needed to push commit and tag back to the repository
     uses: project-ncl/shared-github-actions/.github/workflows/gradle-release.yml@118427846d0593b9fa61c254e2ae13f38f857cec
     with:
+      additional_release_args: "-Prelease.useAutomaticVersion=true"
       ref_to_release: ${{ inputs.ref_to_release }}
     secrets:
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
