@@ -170,3 +170,7 @@ subprojects {
 tasks.named("writePostReleaseVersion") {
     dependsOn("publishAggregationToCentralPortal")
 }
+
+tasks.named("publishAggregationToCentralPortal") {
+    dependsOn subprojects.collect { it.tasks.findByName('build') }.findAll { it != null }
+}
