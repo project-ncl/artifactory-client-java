@@ -11,18 +11,15 @@ buildscript {
 }
 
 plugins {
-    id 'io.github.simonhauck.release' version '1.5.1'
+    id("net.researchgate.release") version "3.1.0"
 }
 
 release {
-    tagName.set("{version}")
-    ignorePreReleaseDependencies = [
-        "org.jboss.pnc.artifactory-client:artifactory-java-client-api",
-        "org.jboss.pnc.artifactory-client:artifactory-java-client-httpClient",
-        "org.jboss.pnc.artifactory-client:artifactory-java-client-services",
-        "org.jboss.pnc.artifactory-client:artifactory-java-client"]
-
+    git {
+        requireBranch.set('master')
+    }
 }
+
 allprojects {
     repositories {
         mavenCentral()
@@ -164,13 +161,6 @@ subprojects {
     }
 }
 
-// Wire publishAggregationToCentralPortal into the release task graph.
-// This ensures it runs after pushRelease but before the post-release snapshot
-// commit is written. If publishing fails the build stops; no snapshot bump is committed.
-tasks.named("writePostReleaseVersion") {
+tasks.named("afterReleaseBuild") {
     dependsOn("publishAggregationToCentralPortal")
-}
-
-tasks.named("publishAggregationToCentralPortal") {
-    dependsOn subprojects.collect { it.tasks.findByName('build') }.findAll { it != null }
 }

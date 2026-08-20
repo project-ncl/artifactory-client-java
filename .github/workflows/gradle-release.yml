@@ -10,11 +10,6 @@ on:
         required: false
         type: string
         default: ''
-      release_type:
-        description: 'Semver component to bump: major, minor or patch. Default: patch'
-        required: false
-        type: string
-        default: 'patch'
 
 jobs:
   call-release-job:
@@ -22,9 +17,7 @@ jobs:
       contents: write # needed to push commit and tag back to the repository
     uses: project-ncl/shared-github-actions/.github/workflows/gradle-release.yml@118427846d0593b9fa61c254e2ae13f38f857cec
     with:
-      java_version: "17"
       ref_to_release: ${{ inputs.ref_to_release }}
-      release_type: ${{ inputs.release_type }}
     secrets:
       SONATYPE_USERNAME: ${{ secrets.SONATYPE_USERNAME }}
       SONATYPE_PASSWORD: ${{ secrets.SONATYPE_PASSWORD }}
