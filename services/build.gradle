@@ -9,7 +9,7 @@ dependencies {
     implementation addSlf4J('jcl-over-slf4j')
     implementation 'commons-io:commons-io:2.22.0'
     testImplementation group: 'org.hamcrest', name: 'hamcrest-core', version: '3.0'
-    testImplementation group: 'org.testng', name: 'testng', version: '7.5.1'
+    testImplementation group: 'org.testng', name: 'testng', version: '7.12.0'
     testImplementation 'org.mockito:mockito-core:5.23.0'
     /*
      * Don't depend upon a specific logging implementation as a compile or runtime dependency.
