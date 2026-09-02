@@ -15,7 +15,7 @@ jobs:
   call-release-job:
     permissions:
       contents: write # needed to push commit and tag back to the repository
-    uses: project-ncl/shared-github-actions/.github/workflows/gradle-release.yml@fd498e183728287d5a17fd0edcbbaace19551c00
+    uses: project-ncl/shared-github-actions/.github/workflows/gradle-release.yml@646d9b629925d6405fb06ed1476aefd6b2cdca86 # v0.0.23
     with:
       additional_release_args: "-Prelease.useAutomaticVersion=true"
       ref_to_release: ${{ inputs.ref_to_release }}
