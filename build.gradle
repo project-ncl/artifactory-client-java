@@ -63,7 +63,7 @@ subprojects {
             force 'net.minidev:json-smart:2.6.0'
             force 'com.jayway.jsonpath:json-path:3.0.0'
             force 'com.google.guava:guava:33.4.0-jre'
-            force 'org.xmlunit:xmlunit-core:2.10.0'
+            force 'org.xmlunit:xmlunit-core:2.13.0'
         }
 
         // Exclude problematic dependencies
