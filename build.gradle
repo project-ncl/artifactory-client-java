@@ -60,7 +60,7 @@ subprojects {
         resolutionStrategy {
             // Latest secure versions
             force 'commons-io:commons-io:2.18.0'
-            force 'net.minidev:json-smart:2.5.2'
+            force 'net.minidev:json-smart:2.6.0'
             force 'com.jayway.jsonpath:json-path:2.9.0'
             force 'com.google.guava:guava:33.4.0-jre'
             force 'org.xmlunit:xmlunit-core:2.10.0'
