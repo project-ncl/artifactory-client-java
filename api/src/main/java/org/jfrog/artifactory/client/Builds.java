@@ -4,6 +4,8 @@ import org.jfrog.artifactory.client.model.AllBuilds;
 import org.jfrog.artifactory.client.model.BuildPromotionRequest;
 import org.jfrog.artifactory.client.model.BuildPromotionResponse;
 import org.jfrog.artifactory.client.model.BuildRuns;
+import org.jfrog.artifactory.client.model.PncPromotionRequest;
+import org.jfrog.artifactory.client.model.PncPromotionResponse;
 import org.jfrog.build.api.Build;
 
 import java.io.IOException;
@@ -55,4 +57,29 @@ public interface Builds {
      * @throws IOException if the promotion fails
      */
     BuildPromotionResponse promoteBuild(String buildName, String buildNumber, BuildPromotionRequest promotionRequest, String project) throws IOException;
+
+    /**
+     * Promote a build via the pncPromotion user plugin.
+     *
+     * @param buildName   the build name
+     * @param buildNumber the build number
+     * @param request     the promotion parameters
+     * @return the promotion response containing message, artifact count, and dependency count
+     * @throws IOException if the request fails
+     */
+    PncPromotionResponse promotePNCBuild(String buildName, String buildNumber,
+            PncPromotionRequest request) throws IOException;
+
+    /**
+     * Promote a build via the pncPromotion user plugin, scoped to a project.
+     *
+     * @param buildName   the build name
+     * @param buildNumber the build number
+     * @param request     the promotion parameters
+     * @param project     the project key (passed as {@code ?project=} query parameter); may be null
+     * @return the promotion response containing message, artifact count, and dependency count
+     * @throws IOException if the request fails
+     */
+    PncPromotionResponse promotePNCBuild(String buildName, String buildNumber,
+            PncPromotionRequest request, String project) throws IOException;
 }

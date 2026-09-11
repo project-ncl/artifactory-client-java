@@ -6,6 +6,10 @@ This is a fork of the original https://github.com/jfrog/artifactory-client-java
 
 Note that this excludes internal changes such as publishing to the `org.jboss.pnc` namespace and github actions.
 
+## 2.22.2
+
+- **Add `promotePNCBuild`** — extends the `Builds` API with a `promotePNCBuild` operation that invokes the `pncPromotion` user plugin endpoint (`POST /api/plugins/build/promote/pncPromotion/{name}/{number}`). Adds new `PncPromotionRequest` / `PncPromotionResponse` interfaces and their implementations. The request has two mandatory fields (`targetRepository`, `buildInfoRepo`) and six optional fields (`buildStartTime`, `comment`, `status`, `artifacts`, `dependencies`, `copy`). Mandatory fields are validated client-side. The response carries `message`, `promotedArts`, and `promotedDeps` from the plugin's JSON reply.
+
 ## 2.22.1
 
 - **Fix HTTP error handling** — `post()` and `patch()` now check for error responses before deserialisation, preventing spurious `JsonParseException` errors in place of meaningful HTTP exceptions.
@@ -439,6 +443,29 @@ AllBuilds allBuilds = artifactory.builds().getAllBuilds();
 ##### Get Build Runs
 ```groovy
 BuildRuns buildRuns = artifactory.builds().getBuildRuns("BuildName");
+```
+
+##### Promote a Build via the pncPromotion User Plugin
+```groovy
+import org.jfrog.artifactory.client.model.PncPromotionResponse
+import org.jfrog.artifactory.client.model.impl.PncPromotionRequestImpl
+
+PncPromotionRequestImpl request = new PncPromotionRequestImpl()
+request.setTargetRepository("pnc-mvn-ibm-builds")
+request.setBuildInfoRepo("pnc-build-info")
+// optional fields
+request.setStatus("promoted")
+request.setArtifacts(true)
+request.setDependencies(false)
+request.setCopy(false)       // false = move (default); true = copy
+
+PncPromotionResponse result = artifactory.builds().promotePNCBuild("my-build", "42", request)
+println result.getMessage()      // "Build my-build/42 has been successfully promoted"
+println result.getPromotedArts() // number of promoted artifacts
+println result.getPromotedDeps() // number of promoted dependencies
+
+// Scoped to an Artifactory project (passes ?project= as a query parameter)
+PncPromotionResponse result = artifactory.builds().promotePNCBuild("my-build", "42", request, "pnc-devel")
 ```
 
 #### Managing Items (files and folders)
