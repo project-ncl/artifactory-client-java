@@ -16,7 +16,7 @@ dependencies {
      * https://github.com/jfrog/artifactory-client-java/issues/43
      * https://github.com/jfrog/artifactory-client-java/issues/232
      */
-    testRuntimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.18'
+    testRuntimeOnly group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.19'
 }
 
 task createReleasePropertiesFile(type: Exec) {
