@@ -29,6 +29,9 @@ dependencies {
 
 Note that this excludes internal changes such as publishing to the `org.jboss.pnc` namespace and github actions.
 
+## 2.22.4
+- **Add support for `propagateQueryParams` option in GenericRepositorySettings** — creating a Generic Remote Repository now supports option to propagate query parameters  
+
 ## 2.22.3
 
 - **Add `promotePNCBuild`** — extends the `Builds` API with a `promotePNCBuild` operation that invokes the `pncPromotion` user plugin endpoint (`POST /api/plugins/build/promote/pncPromotion/{name}/{number}`). Adds new `PncPromotionRequest` / `PncPromotionResponse` interfaces and their implementations. The request has two mandatory fields (`targetRepository`, `buildInfoRepo`) and six optional fields (`buildStartTime`, `comment`, `status`, `artifacts`, `dependencies`, `copy`). Mandatory fields are validated client-side. The response carries `message`, `promotedArts`, and `promotedDeps` from the plugin's JSON reply.

@@ -12,4 +12,6 @@ public interface GenericRepositorySettings extends RepositorySettings {
 
     Boolean getListRemoteFolderItems();
 
+    Boolean getPropagateQueryParams();
+
 }

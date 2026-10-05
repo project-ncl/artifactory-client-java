@@ -21,6 +21,7 @@ class GenericPackageTypeRepositoryTests extends BaseRepositoryTests {
         settings.with {
             // remote
             listRemoteFolderItems = rnd.nextBoolean()
+            propagateQueryParams = rnd.nextBoolean()
         }
 
         return settings
@@ -73,6 +74,7 @@ class GenericPackageTypeRepositoryTests extends BaseRepositoryTests {
             assertThat(packageType, CoreMatchers.is(expectedSettings.getPackageType()))
             assertThat(repoLayout, CoreMatchers.is(expectedSettings.getRepoLayout()))
             assertThat(listRemoteFolderItems, CoreMatchers.is(expectedSettings.getListRemoteFolderItems()))
+            assertThat(propagateQueryParams, CoreMatchers.is(expectedSettings.getPropagateQueryParams()))
         }
     }
 

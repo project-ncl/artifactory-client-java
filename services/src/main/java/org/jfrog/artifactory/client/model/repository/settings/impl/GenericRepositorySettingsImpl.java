@@ -11,6 +11,7 @@ import org.jfrog.artifactory.client.model.repository.settings.GenericRepositoryS
 public class GenericRepositorySettingsImpl extends AbstractRepositorySettings implements GenericRepositorySettings {
     public static String defaultLayout = "simple-default";
     private Boolean listRemoteFolderItems;
+    private Boolean propagateQueryParams;
 
     public GenericRepositorySettingsImpl() {
         super(defaultLayout);
@@ -28,6 +29,14 @@ public class GenericRepositorySettingsImpl extends AbstractRepositorySettings im
         this.listRemoteFolderItems = listRemoteFolderItems;
     }
 
+    public Boolean getPropagateQueryParams() {
+        return propagateQueryParams;
+    }
+
+    public void setPropagateQueryParams(Boolean propagateQueryParams) {
+        this.propagateQueryParams = propagateQueryParams;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -35,11 +44,15 @@ public class GenericRepositorySettingsImpl extends AbstractRepositorySettings im
 
         GenericRepositorySettingsImpl that = (GenericRepositorySettingsImpl) o;
 
-        return listRemoteFolderItems != null ? listRemoteFolderItems.equals(that.listRemoteFolderItems) : that.listRemoteFolderItems == null;
+        if (listRemoteFolderItems != null ? !listRemoteFolderItems.equals(that.listRemoteFolderItems) : that.listRemoteFolderItems != null)
+            return false;
+        return propagateQueryParams != null ? propagateQueryParams.equals(that.propagateQueryParams) : that.propagateQueryParams == null;
     }
 
     @Override
     public int hashCode() {
-        return listRemoteFolderItems != null ? listRemoteFolderItems.hashCode() : 0;
+        int result = listRemoteFolderItems != null ? listRemoteFolderItems.hashCode() : 0;
+        result = 31 * result + (propagateQueryParams != null ? propagateQueryParams.hashCode() : 0);
+        return result;
     }
 }
