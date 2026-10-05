@@ -1,6 +1,29 @@
 # ProjectNCL Fork
 
-This is a fork of the original https://github.com/jfrog/artifactory-client-java
+This is a fork of the original https://github.com/jfrog/artifactory-client-java published under the Maven coordinates `org.jboss.pnc.artifactory-client:artifactory-java-client-services`.
+
+### Dependency Coordinates
+
+#### Maven
+
+```xml
+<dependency>
+    <groupId>org.jboss.pnc.artifactory-client</groupId>
+    <artifactId>artifactory-java-client-services</artifactId>
+    <version>...</version>
+</dependency>
+```
+
+#### Gradle
+
+```groovy
+repositories {
+    mavenCentral()
+}
+dependencies {
+    implementation 'org.jboss.pnc.artifactory-client:artifactory-java-client-services:...'
+}
+```
 
 ## Changes since 2.21.2
 
@@ -76,7 +99,9 @@ searches, upload and download artifacts to or from Artifactory and a lot more.
 
 ### Add *artifactory-java-client-services* as a dependency to your build script.
 
-#### Maven
+> **Note:** The examples below show the original upstream JFrog dependency coordinates (`org.jfrog.artifactory.client`). For the ProjectNCL fork coordinates, use `org.jboss.pnc.artifactory-client` as shown in the [ProjectNCL Fork](#projectncl-fork) section at the top of this README.
+
+#### Maven (Original JFrog)
 
 Add the following dependency to your `pom.xml` file:
 
@@ -88,7 +113,7 @@ Add the following dependency to your `pom.xml` file:
 </dependency>
 ```
 
-#### Gradle
+#### Gradle (Original JFrog)
 
 Add the following snippets to your `build.gradle` file:
 
