@@ -14,11 +14,28 @@ import static java.util.stream.Collectors.toMap;
 import static org.jfrog.artifactory.client.aql.AqlInclude.buildWithElements;
 
 public class AqlQueryBuilder {
+    private String domain;
     private AqlRootElement root = new AqlRootElement();
     private AqlItem sort;
     private AqlInclude include;
     private Integer limit;
     private Integer offset;
+
+    public AqlQueryBuilder() {
+        this("items");
+    }
+
+    public AqlQueryBuilder(String domain) {
+        this.domain = domain != null ? domain : "items";
+    }
+
+    public static AqlQueryBuilder items() {
+        return new AqlQueryBuilder("items");
+    }
+
+    public static AqlQueryBuilder builds() {
+        return new AqlQueryBuilder("builds");
+    }
 
     public AqlQueryBuilder item(AqlItem item) {
         root.putAll(item.value());
@@ -78,6 +95,55 @@ public class AqlQueryBuilder {
         return or(setToArray(items));
     }
 
+    public AqlQueryBuilder last(String key, String timeRange) {
+        if (key != null) {
+            root.putAll(AqlItem.last(key, timeRange).value());
+        }
+        return this;
+    }
+
+    public AqlQueryBuilder eq(String key, Object value) {
+        if (key != null) {
+            root.putAll(AqlItem.eq(key, value).value());
+        }
+        return this;
+    }
+
+    public AqlQueryBuilder ne(String key, Object value) {
+        if (key != null) {
+            root.putAll(AqlItem.ne(key, value).value());
+        }
+        return this;
+    }
+
+    public AqlQueryBuilder gt(String key, Object value) {
+        if (key != null) {
+            root.putAll(AqlItem.gt(key, value).value());
+        }
+        return this;
+    }
+
+    public AqlQueryBuilder gte(String key, Object value) {
+        if (key != null) {
+            root.putAll(AqlItem.gte(key, value).value());
+        }
+        return this;
+    }
+
+    public AqlQueryBuilder lt(String key, Object value) {
+        if (key != null) {
+            root.putAll(AqlItem.lt(key, value).value());
+        }
+        return this;
+    }
+
+    public AqlQueryBuilder lte(String key, Object value) {
+        if (key != null) {
+            root.putAll(AqlItem.lte(key, value).value());
+        }
+        return this;
+    }
+
     public AqlQueryBuilder include(String... elements) {
         if (isNotEmpty(elements)) {
             include = buildWithElements(elements);
@@ -118,7 +184,7 @@ public class AqlQueryBuilder {
 
     public String build() {
         try {
-            return "items.find(" + getRootAsString() + ")" + getIncludeAsString()
+            return domain + ".find(" + getRootAsString() + ")" + getIncludeAsString()
                     + getSortAsString() + getOffsetAsString() + getLimitAsString();
         } catch (JsonProcessingException e) {
             throw new AqlBuilderException("Error serializing object to json: ", e);

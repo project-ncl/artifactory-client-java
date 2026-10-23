@@ -6,6 +6,8 @@ import org.jfrog.artifactory.client.model.BuildPromotionResponse;
 import org.jfrog.artifactory.client.model.BuildRuns;
 import org.jfrog.artifactory.client.model.PncPromotionRequest;
 import org.jfrog.artifactory.client.model.PncPromotionResponse;
+import org.jfrog.artifactory.client.model.PncRollbackRequest;
+import org.jfrog.artifactory.client.model.PncRollbackResponse;
 import org.jfrog.build.api.Build;
 
 import java.io.IOException;
@@ -82,4 +84,29 @@ public interface Builds {
      */
     PncPromotionResponse promotePNCBuild(String buildName, String buildNumber,
             PncPromotionRequest request, String project) throws IOException;
+
+    /**
+     * Roll back a previously promoted build via the pncRollback user plugin.
+     *
+     * @param buildName   the build name
+     * @param buildNumber the build number
+     * @param request     the rollback parameters
+     * @return the rollback response containing message, rolled-back counts, and skipped counts
+     * @throws IOException if the request fails
+     */
+    PncRollbackResponse rollbackPNCBuild(String buildName, String buildNumber,
+            PncRollbackRequest request) throws IOException;
+
+    /**
+     * Roll back a previously promoted build via the pncRollback user plugin, scoped to a project.
+     *
+     * @param buildName   the build name
+     * @param buildNumber the build number
+     * @param request     the rollback parameters
+     * @param project     the project key (passed as {@code ?project=} query parameter); may be null
+     * @return the rollback response containing message, rolled-back counts, and skipped counts
+     * @throws IOException if the request fails
+     */
+    PncRollbackResponse rollbackPNCBuild(String buildName, String buildNumber,
+            PncRollbackRequest request, String project) throws IOException;
 }

@@ -13,6 +13,13 @@ public class AqlItem {
     private static final String AND = "$and";
     private static final String MATCH = "$match";
     private static final String NOT_MATCH = "$nmatch";
+    private static final String LAST = "$last";
+    private static final String EQ = "$eq";
+    private static final String NE = "$ne";
+    private static final String GT = "$gt";
+    private static final String GTE = "$gte";
+    private static final String LT = "$lt";
+    private static final String LTE = "$lte";
 
     private Map<String, Object> item;
 
@@ -47,6 +54,34 @@ public class AqlItem {
 
     public static AqlItem notMatch(String key, String pattern) {
         return new AqlItem(key, new AqlItem(NOT_MATCH, pattern));
+    }
+
+    public static AqlItem last(String key, String timeRange) {
+        return new AqlItem(key, new AqlItem(LAST, timeRange));
+    }
+
+    public static AqlItem eq(String key, Object value) {
+        return new AqlItem(key, new AqlItem(EQ, value));
+    }
+
+    public static AqlItem ne(String key, Object value) {
+        return new AqlItem(key, new AqlItem(NE, value));
+    }
+
+    public static AqlItem gt(String key, Object value) {
+        return new AqlItem(key, new AqlItem(GT, value));
+    }
+
+    public static AqlItem gte(String key, Object value) {
+        return new AqlItem(key, new AqlItem(GTE, value));
+    }
+
+    public static AqlItem lt(String key, Object value) {
+        return new AqlItem(key, new AqlItem(LT, value));
+    }
+
+    public static AqlItem lte(String key, Object value) {
+        return new AqlItem(key, new AqlItem(LTE, value));
     }
 
     @JsonIgnore
