@@ -10,10 +10,13 @@ import org.jfrog.artifactory.client.model.BuildPromotionResponse;
 import org.jfrog.artifactory.client.model.BuildRuns;
 import org.jfrog.artifactory.client.model.PncPromotionRequest;
 import org.jfrog.artifactory.client.model.PncPromotionResponse;
+import org.jfrog.artifactory.client.model.PncRollbackRequest;
+import org.jfrog.artifactory.client.model.PncRollbackResponse;
 import org.jfrog.artifactory.client.model.impl.AllBuildsImpl;
 import org.jfrog.artifactory.client.model.impl.BuildPromotionResponseImpl;
 import org.jfrog.artifactory.client.model.impl.BuildRunsImpl;
 import org.jfrog.artifactory.client.model.impl.PncPromotionResponseImpl;
+import org.jfrog.artifactory.client.model.impl.PncRollbackResponseImpl;
 import org.jfrog.build.api.Build;
 
 import java.io.IOException;
@@ -131,6 +134,58 @@ public class BuildsImpl implements Builds {
             if (sb.length() > 0) sb.append(";");
             sb.append(key).append("=").append(Util.encodeParams(value));
         }
+    }
+
+    @Override
+    public PncRollbackResponse rollbackPNCBuild(String buildName, String buildNumber,
+            PncRollbackRequest request) throws IOException {
+        return rollbackPNCBuild(buildName, buildNumber, request, null);
+    }
+
+    @Override
+    public PncRollbackResponse rollbackPNCBuild(String buildName, String buildNumber,
+            PncRollbackRequest request, String project) throws IOException {
+        if (request.getTargetRepository() == null || request.getTargetRepository().isEmpty()) {
+            throw new IllegalArgumentException("targetRepository is mandatory");
+        }
+        if (request.getBuildInfoRepo() == null || request.getBuildInfoRepo().isEmpty()) {
+            throw new IllegalArgumentException("buildInfoRepo is mandatory");
+        }
+
+        String apiPath = baseApiPath + "/plugins/build/promote/pncRollback/"
+                + Util.encodeParams(buildName) + "/"
+                + Util.encodeParams(buildNumber);
+
+        String separator = "?";
+        if (project != null && !project.isEmpty()) {
+            apiPath += separator + "project=" + Util.encodeParams(project);
+            separator = "&";
+        }
+        String encodedParams = encodeRollbackParams(request);
+        if (!encodedParams.isEmpty()) {
+            apiPath += separator + "params=" + encodedParams;
+        }
+
+        return artifactory.post(apiPath, ContentType.APPLICATION_JSON,
+                null, null, PncRollbackResponseImpl.class, PncRollbackResponse.class);
+    }
+
+    /**
+     * Encodes {@link PncRollbackRequest} values into the Artifactory plugin params wire format.
+     * Uses semicolon (;) as the key=value pair separator, as recommended by JFrog
+     * for the /api/plugins/ API family. Format: {@code p1=v1;p2=v2}
+     */
+    private static String encodeRollbackParams(PncRollbackRequest r) throws IOException {
+        StringBuilder sb = new StringBuilder();
+        appendParam(sb, "targetRepository", r.getTargetRepository());
+        appendParam(sb, "buildInfoRepo",    r.getBuildInfoRepo());
+        appendParam(sb, "buildStartTime",   r.getBuildStartTime());
+        appendParam(sb, "comment",          r.getComment());
+        appendParam(sb, "status",           r.getStatus());
+        if (r.getArtifacts() != null)    appendParam(sb, "artifacts",    r.getArtifacts().toString());
+        if (r.getDependencies() != null) appendParam(sb, "dependencies", r.getDependencies().toString());
+        if (r.getCopy() != null)         appendParam(sb, "copy",         r.getCopy().toString());
+        return sb.toString();
     }
 
     public String getBuilderApi() {
