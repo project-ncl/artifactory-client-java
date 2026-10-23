@@ -291,4 +291,40 @@ public class AqlQueryBuilderTest {
         assertThat(result, notNullValue());
         assertThat(result, is("items.find()"));
     }
+
+    @Test
+    public void buildsQueryWithIncludes() {
+        String result = AqlQueryBuilder.builds()
+                .item(aqlItem("number", "build-ABC"))
+                .include("name", "number", "started", "promotion")
+                .build();
+
+        assertThat(result, notNullValue());
+        assertThat(result, is("builds.find({\"number\":\"build-ABC\"}).include(\"name\",\"number\",\"started\",\"promotion\")"));
+    }
+
+    @Test
+    public void buildsQueryWithLast() {
+        String result = AqlQueryBuilder.builds()
+                .item(aqlItem("name", "org.example.app:sample-app:1.0.0"))
+                .last("created", "7d")
+                .include("name", "number", "started")
+                .build();
+
+        assertThat(result, notNullValue());
+        assertTrue(result.startsWith("builds.find("));
+        assertTrue(result.contains("\"name\":\"org.example.app:sample-app:1.0.0\""));
+        assertTrue(result.contains("\"created\":{\"$last\":\"7d\"}"));
+        assertTrue(result.endsWith(".include(\"name\",\"number\",\"started\")"));
+    }
+
+    @Test
+    public void buildsQueryWithComparisonOperators() {
+        String result = AqlQueryBuilder.builds()
+                .gte("created", "2024-01-15T10:00:00.000Z")
+                .build();
+
+        assertThat(result, notNullValue());
+        assertThat(result, is("builds.find({\"created\":{\"$gte\":\"2024-01-15T10:00:00.000Z\"}})"));
+    }
 }

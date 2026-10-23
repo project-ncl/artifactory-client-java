@@ -65,4 +65,6 @@ public interface Searches {
 
     Searches specific();
 
+    BuildSearches builds();
+
 }

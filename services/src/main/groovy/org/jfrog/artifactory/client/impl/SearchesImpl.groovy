@@ -3,6 +3,7 @@ package org.jfrog.artifactory.client.impl
 import org.apache.http.client.HttpResponseException
 import org.apache.http.entity.ContentType
 import org.jfrog.artifactory.client.Artifactory
+import org.jfrog.artifactory.client.BuildSearches
 import org.jfrog.artifactory.client.PropertyFilters
 import org.jfrog.artifactory.client.Searches
 import org.jfrog.artifactory.client.impl.util.Util
@@ -165,7 +166,7 @@ class SearchesImpl implements Searches {
 
     @Override
     List<AqlItem> artifactsByFileSpec(FileSpec fileSpec) {
-        String url = "${getSearcherApi()}/aql"
+        String url = "${getSearcherApi()}aql"
         List<AqlItem> results = new ArrayList<>()
         for (String groupAql : fileSpec.toAql()) {
             AqlSearchResults groupResults = artifactory.post(url, ContentType.TEXT_PLAIN, groupAql, null, AqlSearchResults, null)
@@ -173,6 +174,11 @@ class SearchesImpl implements Searches {
         }
         results.forEach { it.resolveRepoCache() }
         return results
+    }
+
+    @Override
+    BuildSearches builds() {
+        new BuildSearchesImpl(artifactory, baseApiPath)
     }
 
     String getSearcherApi() {
