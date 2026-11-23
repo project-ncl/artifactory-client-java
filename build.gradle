@@ -80,7 +80,7 @@ subprojects {
         implementation 'com.fasterxml.jackson.core:jackson-databind:2.23.0'
         implementation 'com.fasterxml.jackson.core:jackson-annotations:2.23'
         api 'org.jfrog.filespecs:file-specs-java:1.1.2'
-        api 'org.jfrog.buildinfo:build-info-api:2.44.1'
+        api 'org.jfrog.buildinfo:build-info-api:2.44.2'
     }
 
     tasks.register('sourcesJar', Jar) {
